@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
-import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { Header } from '../../components/Header/Header';
+import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { sortByType } from '../../helpers/sortByType';
 import { Loader } from '../../components/Loader/Loader';
+import axios from 'axios';
 
-import './HomePage.scss';
-
-export const HomePage = (props) => {
+export const CouncilsPage = (props) => {
+	const url = 'http://ws-old.parlament.ch/councils?format=json';
 	const { data, validatedData, setValidatedData, setData } = props;
-	const url = 'http://ws-old.parlament.ch/councillors?format=json';
 
 	useEffect(() => {
 		axios
@@ -24,9 +22,10 @@ export const HomePage = (props) => {
 	return (
 		<>
 			<Header />
+
 			{data.length > 0 ? (
 				<section className='main-section'>
-					<SectionHeader {...props} page='Councillors' />
+					<SectionHeader {...props} page='Councils' />
 					<table className='table'>
 						<thead>
 							<tr>
@@ -37,17 +36,17 @@ export const HomePage = (props) => {
 								</th>
 								<th
 									onClick={() =>
-										setValidatedData([...sortByType('firstName', data)])
+										setValidatedData([...sortByType('abbreviation', data)])
 									}
 								>
-									First Name
+									Abbreviation
 								</th>
 								<th
 									onClick={() =>
-										setValidatedData([...sortByType('lastName', data)])
+										setValidatedData([...sortByType('type', data)])
 									}
 								>
-									Last Name
+									Type
 								</th>
 							</tr>
 						</thead>
@@ -55,8 +54,8 @@ export const HomePage = (props) => {
 							{validatedData.map((item) => (
 								<tr key={item.id}>
 									<td>{item.id}</td>
-									<td>{item.firstName}</td>
-									<td>{item.lastName}</td>
+									<td>{item.abbreviation}</td>
+									<td>{item.type}</td>
 								</tr>
 							))}
 						</tbody>

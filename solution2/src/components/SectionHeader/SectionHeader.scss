@@ -1,0 +1,35 @@
+.section__header {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+}
+
+.header {
+  &__title {
+    margin: 20px;
+    font-size: 40px;
+    font-weight: 600;
+    color: #4DBDC6;
+  }
+  &__searchbar {
+    border: 2px solid #4DBDC6;
+    border-radius: 5px;
+    padding: 5px 10px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(-50%, -50%);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    &::placeholder {
+      color: #a6a6a6;
+    }
+    &:focus {
+      outline: none;
+      border: 2px solid #0096a1;
+    }
+  }
+}

@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
-import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { Header } from '../../components/Header/Header';
+import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { sortByType } from '../../helpers/sortByType';
 import { Loader } from '../../components/Loader/Loader';
+import axios from 'axios';
 
-import './HomePage.scss';
-
-export const HomePage = (props) => {
+export const AffairsPage = (props) => {
+	const url = 'http://ws-old.parlament.ch/affairs?format=json';
 	const { data, validatedData, setValidatedData, setData } = props;
-	const url = 'http://ws-old.parlament.ch/councillors?format=json';
 
 	useEffect(() => {
 		axios
@@ -26,7 +24,7 @@ export const HomePage = (props) => {
 			<Header />
 			{data.length > 0 ? (
 				<section className='main-section'>
-					<SectionHeader {...props} page='Councillors' />
+					<SectionHeader {...props} page='Affairs' />
 					<table className='table'>
 						<thead>
 							<tr>
@@ -35,28 +33,12 @@ export const HomePage = (props) => {
 								>
 									Id
 								</th>
-								<th
-									onClick={() =>
-										setValidatedData([...sortByType('firstName', data)])
-									}
-								>
-									First Name
-								</th>
-								<th
-									onClick={() =>
-										setValidatedData([...sortByType('lastName', data)])
-									}
-								>
-									Last Name
-								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{validatedData.map((item) => (
 								<tr key={item.id}>
 									<td>{item.id}</td>
-									<td>{item.firstName}</td>
-									<td>{item.lastName}</td>
 								</tr>
 							))}
 						</tbody>
