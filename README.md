@@ -12,7 +12,8 @@
 
 <h3>What can be improved: </h3>
 
-- remove clog from SectionHeader
-- create scss variables
 - use state manager for data (not to pass through props)
+- create scss variables
+- event.target.value.toLowerCase(), create variable for lowercase event to avoid repeating (DRY)
+- remove clog from SectionHeader
 - add hover effects to nav items
