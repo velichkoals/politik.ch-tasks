@@ -4,64 +4,75 @@ const tableBody = document.createElement('tbody');
 const tableHead = document.querySelector('thead');
 const url = 'http://ws-old.parlament.ch/councillors?format=json';
 
-getCouncillorsByQuery(url, '');
+getCouncillorsByQuery(url).then((response) => renderTable(response));
 
-searchBar.addEventListener('keyup', (e) => getCouncillorsByQuery(url,e));
+searchBar.addEventListener('keyup', (e) => renderTable(localStorage.getItem('data'),e));
 
-async function getCouncillorsByQuery(url, event) {
-        tableBody.innerHTML = ''
-
+async function getCouncillorsByQuery(url) {
+    console.log('called')
         const response = await fetch(url);
         const data = await response.json();
-        let validatedData;
+        localStorage.setItem('data', JSON.stringify(data));
 
-        if (event?.target?.value) {
-            validatedData = data.filter((item) =>
-                item.id.toString().includes(event.target.value)
-                || item.firstName.toLowerCase().includes(event.target.value)
-                || item.lastName.toLowerCase().includes(event.target.value)
+        return JSON.stringify(data);
+}
+
+
+function renderTable(data, event) {
+    data = JSON.parse(data);
+
+    tableBody.innerHTML = ''
+    let validatedData;
+
+    if (event?.target?.value) {
+        let lowerCaseEvent = event.target.value.trim().toLowerCase();
+        validatedData = data.filter((item) =>
+                item.id.toString().includes(lowerCaseEvent)
+                || item.firstName.toLowerCase().includes(lowerCaseEvent)
+                || item.lastName.toLowerCase().includes(lowerCaseEvent)
             );
-        } else {
-            validatedData = data;
+    } else {
+        validatedData = data;
+    }
+
+    if (event === 'id') {
+        sortByType('id', data)
+    }
+    if (event === 'firstName') {
+        sortByType('firstName', data)
+    }
+    if (event === 'lastName') {
+        sortByType('lastName', data)
+    }
+
+    validatedData.map((item) => {
+        const row = document.createElement('tr');
+        const user = {
+            id: item.id,
+            firstName: item.firstName,
+            lastName: item.lastName,
         }
 
-        if (event === 'id') {
-            sortByType('id', data)
+        for (let key in user) {
+            const rowElem = document.createElement('td');
+            rowElem.textContent = user[key];
+            row.appendChild(rowElem);
+            tableBody.appendChild(row);
         }
-        if (event === 'firstName') {
-            sortByType('firstName', data)
-        }
-        if (event === 'lastName') {
-            sortByType('lastName', data)
-        }
-
-        validatedData.map((item) => {
-            const row = document.createElement('tr');
-            const user = {
-                id: item.id,
-                firstName: item.firstName,
-                lastName: item.lastName,
-            }
-
-            for (let key in user) {
-                const rowElem = document.createElement('td');
-                rowElem.textContent = user[key];
-                row.appendChild(rowElem);
-                tableBody.appendChild(row);
-            }
-            table.appendChild(tableBody);
+        table.appendChild(tableBody);
         })
 }
 
 tableHead.addEventListener('click', (e) => {
+    const data = localStorage.getItem('data');
     if (e.target.innerText === 'Id') {
-        getCouncillorsByQuery(url, 'id');
+        renderTable(data, 'id');
     }
     if (e.target.innerText === 'First Name') {
-        getCouncillorsByQuery(url, 'firstName');
+        renderTable(data, 'firstName');
     }
     if (e.target.innerText === 'Last Name') {
-        getCouncillorsByQuery(url, 'lastName');
+        renderTable(data, 'lastName');
     }
 })
 
