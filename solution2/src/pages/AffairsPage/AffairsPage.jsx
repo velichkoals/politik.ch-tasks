@@ -1,52 +1,56 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from '../../components/Header/Header';
 import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { sortByType } from '../../helpers/sortByType';
 import { Loader } from '../../components/Loader/Loader';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsers } from '../../store/selectors';
+import { getUsers } from '../../store/users/thunk';
+import { getUsersAction } from '../../store/users/actionCreators';
 
 export const AffairsPage = (props) => {
-	const url = 'http://ws-old.parlament.ch/affairs?format=json';
-	const { data, validatedData, setValidatedData, setData } = props;
+	const dispatch = useDispatch();
+	const users = useSelector(getAllUsers);
+	const [data, setData] = useState(users);
 
 	useEffect(() => {
-		axios
-			.get(url)
-			.then((response) => {
-				setData(response.data);
-				setValidatedData(response.data);
-			})
-			.catch((err) => console.log(err));
+		setTimeout(() => {
+			dispatch(getUsers('affairs'));
+		}, 100);
+
+		return () => {
+			dispatch(getUsersAction([]));
+		};
 	}, []);
+
+	useEffect(() => {
+		setData([...users]);
+	}, [users]);
 
 	return (
 		<>
 			<Header />
-			{data.length > 0 ? (
-				<section className='main-section'>
-					<SectionHeader {...props} page='Affairs' />
+			<section className='main-section'>
+				<SectionHeader {...props} page='Affairs' />
+				{data.length > 0 ? (
 					<table className='table'>
 						<thead>
 							<tr>
-								<th
-									onClick={() => setValidatedData([...sortByType('id', data)])}
-								>
-									Id
-								</th>
+								<th onClick={() => setData([...sortByType('id', data)])}>Id</th>
 							</tr>
 						</thead>
 						<tbody>
-							{validatedData.map((item) => (
+							{data.map((item) => (
 								<tr key={item.id}>
 									<td>{item.id}</td>
 								</tr>
 							))}
 						</tbody>
 					</table>
-				</section>
-			) : (
-				<Loader />
-			)}
+				) : (
+					<Loader />
+				)}
+			</section>
 		</>
 	);
 };

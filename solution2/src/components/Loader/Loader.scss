@@ -1,3 +1,5 @@
+@import "../../variables";
+
 .loader {
   display: inline-block;
   width: 80px;
@@ -10,12 +12,12 @@
   height: 64px;
   margin: 8px;
   border-radius: 50%;
-  border: 6px solid #4DBDC6;
-  border-color: #4DBDC6 transparent #4DBDC6 transparent;
+  border: 6px solid $blue-color;
+  border-color: $blue-color transparent $blue-color transparent;
   animation: loader 1.2s linear infinite;
   position: absolute;
   top: 20%;
-  left: 45%;
+  left: 46%;
   transform: translate(-50%, -50%);
 }
 @keyframes loader {

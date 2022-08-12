@@ -1,58 +1,54 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { SectionHeader } from '../../components/SectionHeader/SectionHeader';
 import { Header } from '../../components/Header/Header';
 import { sortByType } from '../../helpers/sortByType';
 import { Loader } from '../../components/Loader/Loader';
+import { getUsers } from '../../store/users/thunk';
+import { getAllUsers } from '../../store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsersAction } from '../../store/users/actionCreators';
 
 import './HomePage.scss';
 
 export const HomePage = (props) => {
-	const { data, validatedData, setValidatedData, setData } = props;
-	const url = 'http://ws-old.parlament.ch/councillors?format=json';
+	const dispatch = useDispatch();
+	const users = useSelector(getAllUsers);
+	const [data, setData] = useState(users);
 
 	useEffect(() => {
-		axios
-			.get(url)
-			.then((response) => {
-				setData(response.data);
-				setValidatedData(response.data);
-			})
-			.catch((err) => console.log(err));
+		setTimeout(() => {
+			dispatch(getUsers('councillors'));
+		}, 100);
+
+		return () => {
+			dispatch(getUsersAction([]));
+		};
 	}, []);
+
+	useEffect(() => {
+		setData([...users]);
+	}, [users]);
 
 	return (
 		<>
 			<Header />
-			{data.length > 0 ? (
-				<section className='main-section'>
-					<SectionHeader {...props} page='Councillors' />
+			<section className='main-section'>
+				<SectionHeader {...props} page='Councillors' />
+				{data.length > 0 ? (
 					<table className='table'>
 						<thead>
 							<tr>
-								<th
-									onClick={() => setValidatedData([...sortByType('id', data)])}
-								>
-									Id
-								</th>
-								<th
-									onClick={() =>
-										setValidatedData([...sortByType('firstName', data)])
-									}
-								>
+								<th onClick={() => setData([...sortByType('id', data)])}>Id</th>
+								<th onClick={() => setData([...sortByType('firstName', data)])}>
 									First Name
 								</th>
-								<th
-									onClick={() =>
-										setValidatedData([...sortByType('lastName', data)])
-									}
-								>
+								<th onClick={() => setData([...sortByType('lastName', data)])}>
 									Last Name
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							{validatedData.map((item) => (
+							{data.map((item) => (
 								<tr key={item.id}>
 									<td>{item.id}</td>
 									<td>{item.firstName}</td>
@@ -61,10 +57,10 @@ export const HomePage = (props) => {
 							))}
 						</tbody>
 					</table>
-				</section>
-			) : (
-				<Loader />
-			)}
+				) : (
+					<Loader />
+				)}
+			</section>
 		</>
 	);
 };

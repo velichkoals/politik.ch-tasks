@@ -1,3 +1,5 @@
+@import "../../variables";
+
 .section__header {
   display: flex;
   width: 100%;
@@ -8,28 +10,29 @@
 .header {
   &__title {
     margin: 20px;
-    font-size: 40px;
-    font-weight: 600;
-    color: #4DBDC6;
+    font-size: $title;
+    font-weight: $bold;
+    color: $blue-color;
   }
   &__searchbar {
-    border: 2px solid #4DBDC6;
+    border: 2px solid $blue-color;
     border-radius: 5px;
     padding: 5px 10px;
     position: absolute;
     top: 50%;
     right: 0;
     transform: translate(-50%, -50%);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+    font-family: $main-font;
+    font-size: $small;
+    font-weight: $bold;
 
     &::placeholder {
       color: #a6a6a6;
     }
     &:focus {
       outline: none;
-      border: 2px solid #0096a1;
+      border: 2px solid rgba(213, 73, 93, 0.65);
+      color: rgba(249, 85, 109, 0.58);
     }
   }
 }
