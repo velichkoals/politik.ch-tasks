@@ -16,6 +16,8 @@
 
 - axios - https://axios-http.com
 - react-router/react-router-dom - https://reactrouter.com
+- redux - https://redux.js.org
+- redux-thunk - https://github.com/reduxjs/redux-thunk
 
 <h3>Linters:</h3>
 
