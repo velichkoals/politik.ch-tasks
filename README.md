@@ -20,11 +20,3 @@
 
 - prettier - https://prettier.io
 - eslint - https://eslint.org
-
-<h3>What can be improved: </h3>
-
-- use state manager for data (not to pass through props)
-- create scss variables
-- handleSearch - event.target.value.toLowerCase(), create variable for lowercase event to avoid repeating (DRY)
-- remove clog from SectionHeader
-- add hover effects to nav items
