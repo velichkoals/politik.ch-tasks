@@ -7,6 +7,7 @@
 <h4>Solution 2</h4>
 
 - created store using Redux (to avoid props drilling and for project extensibility)
+- API call only on component mount
 - fixed SearchBar problems (include lowerCase event)
 - created scss variables for easy writing styles
 #
